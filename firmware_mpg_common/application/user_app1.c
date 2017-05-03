@@ -155,16 +155,19 @@ State Machine Function Definitions
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
-  //work ������Ƶ����������ѭ��
-  static u32 u32Counter = 0; //�趨һ������������ʱ
-  static bool bLightIsOn = FALSE;  //�趨��ʼ״̬ 
+  //work Heartbeat frequency from slow to fast cycle
+  static u32 u32Counter_Limit_MS=1024;  //Set the period
+  static u32 u32Counter = 0;           //Set a variable to count
+  static bool bLightIsOn = FALSE;      // Set the initial state
   
-  u32Counter++;      //ѭ��һ�μ�һ
+  u32Counter++;      //Loop once plus one
+  if(u32Counter == u32Counter_Limit_MS)   //When the time reaches a cycle
      {
       u32Counter = 0;     
-      if(bLightIsOn)//ͨ���жϸı��״̬
+      if(bLightIsOn)    //Change the lamp status by judging
       {
          HEARTBEAT_OFF();
+         u32Counter_Limit_MS=u32Counter_Limit_MS/2;//Each time the flashing light is halved, the frequency is getting faster
        }
       else
       {
@@ -172,7 +175,9 @@ static void UserApp1SM_Idle(void)
        }
       bLightIsOn = !bLightIsOn;     
    }
+  if(u32Counter_Limit_MS==2)//When the frequency is the fastest, re-restore the cycle
       {
+      u32Counter_Limit_MS=1024;
       }
  //end 
    
