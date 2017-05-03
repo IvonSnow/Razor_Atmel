@@ -150,20 +150,19 @@ void UserApp1RunActiveState(void)
 State Machine Function Definitions
 **********************************************************************************************************************/
       
-static u32 Counter_Limit_MS=500;
-  
+
 /*-------------------------------------------------------------------------------------------------------------------*/
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
-  static u32 u32Counter = 0;
-  static bool bLightIsOn = FALSE;
-  /* Check and roll over */
-  u32Counter++;
-  if(u32Counter == Counter_Limit_MS)
+  //work ������Ƶ����������ѭ��
+  static u32 u32Counter = 0; //�趨һ������������ʱ
+  static bool bLightIsOn = FALSE;  //�趨��ʼ״̬ 
+  
+  u32Counter++;      //ѭ��һ�μ�һ
      {
       u32Counter = 0;     
-      if(bLightIsOn)
+      if(bLightIsOn)//ͨ���жϸı��״̬
       {
          HEARTBEAT_OFF();
        }
@@ -171,12 +170,13 @@ static void UserApp1SM_Idle(void)
       {
          HEARTBEAT_ON();
        }
-      bLightIsOn = !bLightIsOn;
+      bLightIsOn = !bLightIsOn;     
    }
-  
-  
+      {
+      }
+ //end 
    
-  
+ 
    u16BlinkCount++;
    if(u16BlinkCount == 500)
     {
