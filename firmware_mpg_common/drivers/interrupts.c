@@ -142,6 +142,7 @@ Promises:
 */
 void SysTick_Handler(void)
 {
+  
   static u16 u16SecondCounter = 1000;
   
   /* Update the 1ms system timer and clear sleep flag */

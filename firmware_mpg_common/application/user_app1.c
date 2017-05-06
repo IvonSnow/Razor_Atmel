@@ -87,11 +87,16 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
+ LedOn(BLUE);
+ LedOff(PURPLE);
  
+ 
+ LedBlink(YELLOW,LED_2HZ);
   /* If good initialization, set state to Idle */
   if( 1 )
   {
     UserApp1_StateMachine = UserApp1SM_Idle;
+    //UserApp1_StateMachine = BCD_Code_display;
   }
   else
   {
@@ -131,12 +136,181 @@ void UserApp1RunActiveState(void)
 /**********************************************************************************************************************
 State Machine Function Definitions
 **********************************************************************************************************************/
+void BCD_Code_display(void){
+  
+}
+  /*eie way 
+  static u16 u16BlinkCount = 0;
+   static u8 u8Counter = 0,u8OverCounter=0;
 
-/*-------------------------------------------------------------------------------------------------------------------*/
+  u16BlinkCount++;
+  if(u16BlinkCount == 1000)
+  {
+    u16BlinkCount = 0;
+    
+    
+    u8Counter++;
+    if(u8Counter == 10)
+    {
+      u8Counter = 0;
+      u8OverCounter++;
+    }
+    if(u8OverCounter==10)
+      u8OverCounter=0;
+  if(u8Counter & 0x01)
+    {
+      LedOn(RED);
+    }
+    else
+    {
+      LedOff(RED);
+    }
+
+    if(u8Counter & 0x02)
+    {
+      LedOn(ORANGE);
+    }
+    else
+    {
+      LedOff(ORANGE);
+    }
+
+    if(u8Counter & 0x04)
+    {
+      LedOn(YELLOW);
+    }
+    else
+    {
+      LedOff(YELLOW);
+    }
+
+    if(u8Counter & 0x08)
+    {
+      LedOn(GREEN);
+    }
+    else
+    {
+      LedOff(GREEN);
+    }
+    //1 9
+    if(u8OverCounter& 0x01)
+    {
+      LedOn(CYAN);
+    }
+    else
+    {
+      LedOff(CYAN);
+    }
+
+    if(u8OverCounter& 0x02)
+    {
+      LedOn(BLUE);
+    }
+    else
+    {
+      LedOff(BLUE);
+    }
+
+    if(u8OverCounter & 0x04)
+    {
+      LedOn(PURPLE);
+    }
+    else
+    {
+      LedOff(PURPLE);
+    }
+
+    if(u8OverCounter & 0x08)
+    {
+      LedOn(WHITE);
+    }
+    else
+    {
+      LedOff(WHITE);
+    }
+  }
+} 
+   end eie way */ 
+
+  /* teacher ways
+  static u16 u16_counter = 0;
+  static u8 a_u8_binary[8]= 0;
+   u8 u8_temp_counter;
+   u16 u16_counter1 = 0;
+   u16 u16_counter2 = 0;
+   if(G_u32SystemTime1ms%1000==0)
+   {
+    u16_counter++;
+     if(u16_counter==99)
+       u16_counter=0;
+   }
+   u16_counter1=u16_counter%10;
+  for(u8_temp_counter = 7;u8_temp_counter>=4&&u8_temp_counter <=7;u8_temp_counter--)
+   {
+     a_u8_binary[u8_temp_counter]=u16_counter1%2;
+             u16_counter1=u16_counter1/2;
+   }
+   u16_counter2=u16_counter/10;
+   for(u8_temp_counter = 3;u8_temp_counter>=0&&u8_temp_counter <=3;u8_temp_counter--)
+   {
+     a_u8_binary[u8_temp_counter]=u16_counter2%2;
+             u16_counter2=u16_counter2/2;
+   }
+   for(u8_temp_counter = 0;u8_temp_counter <=7;u8_temp_counter++)
+   {
+     if(a_u8_binary[u8_temp_counter]==1)
+       LedOn(u8_temp_counter);
+   else
+       LedOff(u8_temp_counter);
+   }
+}   end teacher way*/
+  
+ /*  my way
+  static u16 u16_Counter=0;
+  static u8 u8_Led_Number=0;
+  static u16 u16_unit=0;
+  static u16 u16_decade=0;
+  if(G_u32SystemTime1ms==1000){
+     u16_Counter++;
+     if(u16_Counter>=99){
+        u16_Counter=0;       
+     } 
+     u16_unit=u16_Counter%10;
+     u16_decade=u16_Counter/10;
+     for(u8_Led_Number=7;u8_Led_Number>=4;u8_Led_Number--){
+       if(u16_unit%2==0){
+          LedOff(u8_Led_Number);
+       }
+       else{
+          LedOn(u8_Led_Number);
+       }
+       u16_unit=u16_unit/2;
+     }
+     for(u8_Led_Number=3;u8_Led_Number>=0;u8_Led_Number--){
+       if(u16_decade%2==0){
+          LedOff(u8_Led_Number);
+       }
+       else{
+          LedOn(u8_Led_Number);
+       }
+       u16_decade=u16_decade/2;
+     }    
+  }
+}
+ end my way*/
+ 
+ /*-------------------------------------------------------------------------------------------------------------------*/
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
-//test
+  static u8 u8_PWM_Red=0;
+  if(G_u32SystemTime1ms==1000){
+    LedToggle(PURPLE);
+  }
+  if(u8_PWM_Red==20){
+       u8_PWM_Red=0;
+    }
+  LedPWM(RED,u8_PWM_Red);
 } /* end UserApp1SM_Idle() */
     
 #if 0
