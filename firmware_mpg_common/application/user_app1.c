@@ -91,7 +91,8 @@ void UserApp1Initialize(void)
   /* If good initialization, set state to Idle */
   if( 1 )
   {
-    UserApp1_StateMachine = UserApp1SM_Idle;
+    //UserApp1_StateMachine = UserApp1SM_Idle;
+      UserApp1_StateMachine= Button_Password;   //The pointer points to the function that you created
   }
   else
   {
@@ -126,7 +127,86 @@ void UserApp1RunActiveState(void)
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Private functions                                                                                                  */
 /*--------------------------------------------------------------------------------------------------------------------*/
+void Button_Password(void)   //Define your own function
+{
+  static u16 ui6_a_Password[9]={1,2,0};   //Password array,Initial password{1,2,0}
+  static u16 u16_a_Test[9]=0;       //Test array
+  static u8 u8_counter=0;   //Used for counting
+  static bool Compared_Result=FALSE;   //result 
+  
+  //enter password
+  if(u8_counter<=9)
+  {
+      if(WasButtonPressed(BUTTON0))
+      {
+       ButtonAcknowledge(BUTTON0);
+       u8_counter++;
+       u16_a_Test[u8_counter]=0;
+      }
+       if(WasButtonPressed(BUTTON1))
+      {
+       ButtonAcknowledge(BUTTON1);
+       u8_counter++;
+       u16_a_Test[u8_counter]=1;
+      }
+       if(WasButtonPressed(BUTTON2))
+      {
+       ButtonAcknowledge(BUTTON2);
+       u8_counter++;
+       u16_a_Test[u8_counter]=2;
+      }
+       if(WasButtonPressed(BUTTON3))   //Judgment password
+       {
+         for(u8_counter=0;u8_counter<=9;u8_counter++)
+         {
+           if(u16_a_Test[u8_counter]!=ui6_a_Password[u8_counter])
+           {  
+             Compared_Result=TRUE;
+           }
+         }
+         if(Compared_Result)
+           LedBlink(RED,LED_2HZ);
+         else
+           LedBlink(GREEN,LED_2HZ);
+       }
 
+   }
+   
+//Press the BUTTON3 to hold down the 3000ms, yellow light, change the password     
+  do{
+     if( IsButtonHeld(BUTTON3, 3000) )   
+     {
+       LedBlink(RED,LED_2HZ);
+       LedBlink(GREEN,LED_2HZ);                       /*******
+                                                   How to quit?
+                                                    *******/
+      if(WasButtonPressed(BUTTON0))
+      {
+       ButtonAcknowledge(BUTTON0);
+       u8_counter++;
+       ui6_a_Password[u8_counter]=0;
+      }
+       if(WasButtonPressed(BUTTON1))
+      {
+       ButtonAcknowledge(BUTTON1);
+       u8_counter++;
+       ui6_a_Password[u8_counter]=1;
+      }
+       if(WasButtonPressed(BUTTON2))
+      {
+       ButtonAcknowledge(BUTTON2);
+       u8_counter++;
+       ui6_a_Password[u8_counter]=2;
+      }
+      if(WasButtonPressed(BUTTON3))
+      {
+         break;
+      }
+    else
+      break;
+     }  
+  }while(u8_counter<=9)
+}  //end Button_Passward
 
 /**********************************************************************************************************************
 State Machine Function Definitions
