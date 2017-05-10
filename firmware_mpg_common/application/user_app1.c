@@ -137,7 +137,7 @@ void Button_Password(void)   //Define your own function
   static u16 u16_a_Test[9]={0,0,0,0,0,0,0,0,0};       //Test array
   static u8 u8_counter=0;   //Used for counting
   static bool Compared_Result=TRUE;   //result 
-  static u8 u8_p_counter=0;
+  
   static u8 Change_Passward=0;  //Confirm the change
   
   //enter password
@@ -185,13 +185,15 @@ void Button_Password(void)   //Define your own function
    }
    
 //Press the BUTTON3 to hold down the 3000ms, yellow light, change the password     
- 
+  static u8 u8_p_counter=0;
+  
   if( IsButtonHeld(BUTTON3, 3000) )   
   {
-    ButtonAcknowledge(BUTTON3);   
+    //ButtonAcknowledge(BUTTON3);   
     Change_Passward=1;
   }
-  while(Change_Passward)
+ // while(Change_Passward)
+  if(Change_Passward)
   {     
          //Prompts the user to enter the password change status
       if(G_u32SystemTime1ms%1000==0)
@@ -203,7 +205,8 @@ void Button_Password(void)   //Define your own function
        LedOn(GREEN);
       }
        //   Enter a new password                                         
-       if(WasButtonPressed(BUTTON0))
+     
+      if(WasButtonPressed(BUTTON0))
          {
            ButtonAcknowledge(BUTTON0);
            ui6_a_Password[u8_p_counter]=0;
@@ -221,13 +224,13 @@ void Button_Password(void)   //Define your own function
             ui6_a_Password[u8_p_counter]=2;
             u8_p_counter++;
          }       
-       if(WasButtonPressed(BUTTON3) || u8_p_counter>=8)  //Confirm password change
-         {
-            ButtonAcknowledge(BUTTON3);
+       if((WasButtonPressed(BUTTON3) &&WasButtonPressed(BUTTON2))||  u8_p_counter>=8)  //Confirm password change
+       {    ButtonAcknowledge(BUTTON3);
+            ButtonAcknowledge(BUTTON2);
             Change_Passward=0;
             LedOn(RED);
             LedOff(RED);
-            break;            
+            //break;            
          }      
    }
 }  //end Button_Passward
