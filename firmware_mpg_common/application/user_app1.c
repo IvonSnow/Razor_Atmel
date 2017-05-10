@@ -87,7 +87,11 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
- 
+    LedOn(RED);              //Initialize to locked state
+    LedOn(LCD_RED);
+    LedOff(LCD_GREEN);
+    LedOff(LCD_BLUE);
+  
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -129,83 +133,103 @@ void UserApp1RunActiveState(void)
 /*--------------------------------------------------------------------------------------------------------------------*/
 void Button_Password(void)   //Define your own function
 {
-  static u16 ui6_a_Password[9]={1,2,0};   //Password array,Initial password{1,2,0}
-  static u16 u16_a_Test[9]=0;       //Test array
+  static u16 ui6_a_Password[9]={0,1,2,1,0,0,0,0,0};   //Password array,Initial password{0,1,2}
+  static u16 u16_a_Test[9]={0,0,0,0,0,0,0,0,0};       //Test array
   static u8 u8_counter=0;   //Used for counting
-  static bool Compared_Result=FALSE;   //result 
+  static bool Compared_Result=TRUE;   //result 
+  static u8 u8_p_counter=0;
+  static u8 Change_Passward=0;  //Confirm the change
   
   //enter password
-  if(u8_counter<=9)
+  if(u8_counter<=8)
   {
-      if(WasButtonPressed(BUTTON0))
+      if(WasButtonPressed(BUTTON0))   //Press the key to assign the corresponding  Test array
       {
        ButtonAcknowledge(BUTTON0);
-       u8_counter++;
        u16_a_Test[u8_counter]=0;
+       u8_counter++;
       }
        if(WasButtonPressed(BUTTON1))
       {
        ButtonAcknowledge(BUTTON1);
-       u8_counter++;
        u16_a_Test[u8_counter]=1;
+       u8_counter++;
       }
        if(WasButtonPressed(BUTTON2))
       {
        ButtonAcknowledge(BUTTON2);
-       u8_counter++;
        u16_a_Test[u8_counter]=2;
+       u8_counter++;
       }
-       if(WasButtonPressed(BUTTON3))   //Judgment password
-       {
-         for(u8_counter=0;u8_counter<=9;u8_counter++)
+       if(WasButtonPressed(BUTTON3) || u8_counter>=8)   //Judgment password when press BUTTON3 or  the password is enough
+      {
+        ButtonAcknowledge(BUTTON3);
+        for(u8_counter=0;u8_counter<=8;u8_counter++)   //Compare Password arrays and Tset arrays
          {
            if(u16_a_Test[u8_counter]!=ui6_a_Password[u8_counter])
            {  
-             Compared_Result=TRUE;
+             Compared_Result=FALSE;
            }
          }
-         if(Compared_Result)
-           LedBlink(RED,LED_2HZ);
+         if(Compared_Result)   //the result
+         {
+           LedOff(RED);
+           LedOff(LCD_RED);
+           LedOn(LCD_GREEN);
+           LedOff(LCD_BLUE);
+           LedBlink(GREEN,LED_2HZ);          
+         }
          else
-           LedBlink(GREEN,LED_2HZ);
-       }
-
+         { LedBlink(RED,LED_2HZ);}
+      }
    }
    
 //Press the BUTTON3 to hold down the 3000ms, yellow light, change the password     
-  do{
-     if( IsButtonHeld(BUTTON3, 3000) )   
-     {
-       LedBlink(RED,LED_2HZ);
-       LedBlink(GREEN,LED_2HZ);                       /*******
-                                                   How to quit?
-                                                    *******/
-      if(WasButtonPressed(BUTTON0))
-      {
-       ButtonAcknowledge(BUTTON0);
-       u8_counter++;
-       ui6_a_Password[u8_counter]=0;
+ 
+  if( IsButtonHeld(BUTTON3, 3000) )   
+  {
+    ButtonAcknowledge(BUTTON3);   
+    Change_Passward=1;
+  }
+  while(Change_Passward)
+  {     
+         //Prompts the user to enter the password change status
+      if(G_u32SystemTime1ms%1000==0)
+      {LedOff(RED);    
+       LedOff(GREEN); 
       }
+      if(G_u32SystemTime1ms%500==0)
+      {LedOn(RED);
+       LedOn(GREEN);
+      }
+       //   Enter a new password                                         
+       if(WasButtonPressed(BUTTON0))
+         {
+           ButtonAcknowledge(BUTTON0);
+           ui6_a_Password[u8_p_counter]=0;
+           u8_p_counter++;
+         }
        if(WasButtonPressed(BUTTON1))
-      {
-       ButtonAcknowledge(BUTTON1);
-       u8_counter++;
-       ui6_a_Password[u8_counter]=1;
-      }
+         {
+            ButtonAcknowledge(BUTTON1);
+            ui6_a_Password[u8_p_counter]=1;
+            u8_p_counter++;
+         }
        if(WasButtonPressed(BUTTON2))
-      {
-       ButtonAcknowledge(BUTTON2);
-       u8_counter++;
-       ui6_a_Password[u8_counter]=2;
-      }
-      if(WasButtonPressed(BUTTON3))
-      {
-         break;
-      }
-    else
-      break;
-     }  
-  }while(u8_counter<=9)
+         {
+            ButtonAcknowledge(BUTTON2);
+            ui6_a_Password[u8_p_counter]=2;
+            u8_p_counter++;
+         }       
+       if(WasButtonPressed(BUTTON3) || u8_p_counter>=8)  //Confirm password change
+         {
+            ButtonAcknowledge(BUTTON3);
+            Change_Passward=0;
+            LedOn(RED);
+            LedOff(RED);
+            break;            
+         }      
+   }
 }  //end Button_Passward
 
 /**********************************************************************************************************************
