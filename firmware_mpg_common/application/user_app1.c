@@ -135,38 +135,38 @@ void Button_Password(void)   //Define your own function
 {
   static u16 ui6_a_Password[9]={0,1,2,1,0,0,0,0,0};   //Password array,Initial password{0,1,2}
   static u16 u16_a_Test[9]={0,0,0,0,0,0,0,0,0};       //Test array
-  static u8 u8_counter=0;   //Used for counting
+  static u16 u16_counter=0;   //Used for counting
   static bool Compared_Result=TRUE;   //result 
   
   static u8 Change_Passward=0;  //Confirm the change
   
   //enter password
-  if(u8_counter<=8)
+  if(u16_counter<=8)
   {
       if(WasButtonPressed(BUTTON0))   //Press the key to assign the corresponding  Test array
       {
        ButtonAcknowledge(BUTTON0);
-       u16_a_Test[u8_counter]=0;
-       u8_counter++;
+       u16_a_Test[u16_counter]=0;
+       u16_counter++;
       }
        if(WasButtonPressed(BUTTON1))
       {
        ButtonAcknowledge(BUTTON1);
-       u16_a_Test[u8_counter]=1;
-       u8_counter++;
+       u16_a_Test[u16_counter]=1;
+       u16_counter++;
       }
        if(WasButtonPressed(BUTTON2))
       {
        ButtonAcknowledge(BUTTON2);
-       u16_a_Test[u8_counter]=2;
-       u8_counter++;
+       u16_a_Test[u16_counter]=2;
+       u16_counter++;
       }
-       if(WasButtonPressed(BUTTON3) || u8_counter>=8)   //Judgment password when press BUTTON3 or  the password is enough
+       if(WasButtonPressed(BUTTON3) || u16_counter>=8)   //Judgment password when press BUTTON3 or  the password is enough
       {
         ButtonAcknowledge(BUTTON3);
-        for(u8_counter=0;u8_counter<=8;u8_counter++)   //Compare Password arrays and Tset arrays
+        for(u16_counter=0;u16_counter<=8;u16_counter++)   //Compare Password arrays and Tset arrays
          {
-           if(u16_a_Test[u8_counter]!=ui6_a_Password[u8_counter])
+           if(u16_a_Test[u16_counter]!=ui6_a_Password[u16_counter])
            {  
              Compared_Result=FALSE;
            }
@@ -185,7 +185,7 @@ void Button_Password(void)   //Define your own function
    }
    
 //Press the BUTTON3 to hold down the 3000ms, yellow light, change the password     
-  static u8 u8_p_counter=0;
+  static u16 u16_p_counter=0;
   
   if( IsButtonHeld(BUTTON3, 3000) )   
   {
@@ -196,11 +196,12 @@ void Button_Password(void)   //Define your own function
   if(Change_Passward)
   {     
          //Prompts the user to enter the password change status
-      if(G_u32SystemTime1ms%1000==0)
+      static u16 u16BlinkCounter=0;
+    if(u16BlinkCounter%100==0)
       {LedOff(RED);    
        LedOff(GREEN); 
       }
-      if(G_u32SystemTime1ms%500==0)
+      if(u16BlinkCounter%200==0)
       {LedOn(RED);
        LedOn(GREEN);
       }
@@ -209,24 +210,24 @@ void Button_Password(void)   //Define your own function
       if(WasButtonPressed(BUTTON0))
          {
            ButtonAcknowledge(BUTTON0);
-           ui6_a_Password[u8_p_counter]=0;
-           u8_p_counter++;
+           ui6_a_Password[u16_p_counter]=0;
+           u16_p_counter++;
          }
        if(WasButtonPressed(BUTTON1))
          {
             ButtonAcknowledge(BUTTON1);
-            ui6_a_Password[u8_p_counter]=1;
-            u8_p_counter++;
+            ui6_a_Password[u16_p_counter]=1;
+            u16_p_counter++;
          }
        if(WasButtonPressed(BUTTON2))
          {
             ButtonAcknowledge(BUTTON2);
-            ui6_a_Password[u8_p_counter]=2;
-            u8_p_counter++;
+            ui6_a_Password[u16_p_counter]=2;
+            u16_p_counter++;
          }       
-       if((WasButtonPressed(BUTTON3) &&WasButtonPressed(BUTTON2))||  u8_p_counter>=8)  //Confirm password change
+       if(u16_p_counter>=8)  //Confirm password change
        {    ButtonAcknowledge(BUTTON3);
-            ButtonAcknowledge(BUTTON2);
+            
             Change_Passward=0;
             LedOn(RED);
             LedOff(RED);
