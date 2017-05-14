@@ -78,10 +78,10 @@ space can be used for scrolling displays.
 
 #define		LCD_DISPLAY_CMD			(u8)0x08		/* Root literal for managing display */
 #define		LCD_DISPLAY_ON			(u8)0x04		/* OR with LCD_DISPLAY_CMD to turn display on */
-#define		LCD_DISPLAY_CURSOR	(u8)0x02		/* OR with LCD_DISPLAY_CMD to turn cursor on */
+#define		LCD_DISPLAY_CURSOR	        (u8)0x02		/* OR with LCD_DISPLAY_CMD to turn cursor on */
 #define		LCD_DISPLAY_BLINK		(u8)0x01		/* OR with LCD_DISPLAY_CMD to turn cursor blink on */
 
-#define		LCD_SHIFT_CMD				(u8)0x10		/* Root literal for display / cursor shift commands */
+#define		LCD_SHIFT_CMD			(u8)0x10		/* Root literal for display / cursor shift commands */
 #define		LCD_SHIFT_DISPLAY		(u8)0x08		/* Set to operate on dislay, clear for cursor */
 #define		LCD_SHIFT_RIGHT			(u8)0x04		/* Set to shift right, clear to shift left */
 

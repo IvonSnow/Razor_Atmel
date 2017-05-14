@@ -42,8 +42,8 @@ All Global variable names shall start with "G_UserApp1"
 ***********************************************************************************************************************/
 /* New variables */
 volatile u32 G_u32UserApp1Flags;                       /* Global state flags */
-
-
+static u8 UserApp_au8MyName[] = "Xue YunFeng"; 
+static u8 UserApp_CursorPosition;
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Existing variables (defined in other files -- should all contain the "extern" keyword) */
 extern volatile u32 G_u32SystemFlags;                  /* From main.c */
@@ -65,10 +65,19 @@ static fnCode_type UserApp1_StateMachine;            /* The state machine functi
 Function Definitions
 **********************************************************************************************************************/
 
+
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Public functions                                                                                                   */
 /*--------------------------------------------------------------------------------------------------------------------*/
-
+void Debug_Interface()
+{
+  static u8 u8Name=0;
+  static u32 u32Counter=0;
+  
+  
+  
+}//end Debug_Interface
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Protected functions                                                                                                */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -87,11 +96,16 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
- LedOn(BLUE);
- LedOff(PURPLE);
- 
- 
- LedBlink(YELLOW,LED_2HZ);
+   //****************************************************
+   LCDCommand(LCD_CLEAR_CMD);
+   LCDMessage(LINE1_START_ADDR,UserApp_au8MyName);
+   LCDMessage(LINE2_START_ADDR,"0");
+   LCDMessage(LINE2_START_ADDR+6,"1");
+   LCDMessage(LINE2_START_ADDR+13,"2");
+   LCDMessage(LINE2_END_ADDR,"3");   
+  //******************************************************
+    LCDCommand(LCD_HOME_CMD);
+    UserApp_CursorPosition = LINE1_START_ADDR;
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -303,14 +317,50 @@ void BCD_Code_display(void){
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
-  static u8 u8_PWM_Red=0;
-  if(G_u32SystemTime1ms==1000){
-    LedToggle(PURPLE);
-  }
-  if(u8_PWM_Red==20){
-       u8_PWM_Red=0;
+  static bool bCursorOn = FALSE;
+  
+  if(WasButtonPressed(BUTTON0))
+  {
+    ButtonAcknowledge(BUTTON0);
+    
+    if(bCursorOn)
+    {
+      /* Cursor is on, so turn it off */
+      LCDCommand(LCD_DISPLAY_CMD | LCD_DISPLAY_ON);
+      bCursorOn = FALSE;
     }
-  LedPWM(RED,u8_PWM_Red);
+    else
+    {
+      /* Cursor is off, so turn it on */
+      LCDCommand(LCD_DISPLAY_CMD | LCD_DISPLAY_ON | LCD_DISPLAY_CURSOR | LCD_DISPLAY_BLINK);
+      bCursorOn = TRUE;
+   }
+  }
+   /* BUTTON3 moves the cursor forward one position */
+  if(WasButtonPressed(BUTTON3))
+  {
+    ButtonAcknowledge(BUTTON3);
+    
+    /* Handle the two special cases or just the regular case */
+    if(UserApp_CursorPosition == LINE1_END_ADDR)
+    {
+      UserApp_CursorPosition = LINE2_START_ADDR;
+    }
+
+    else if (UserApp_CursorPosition == LINE2_END_ADDR)
+    {
+      UserApp_CursorPosition = LINE1_START_ADDR;
+    }
+    
+    /* Otherwise just increment one space */
+    else
+    {
+      UserApp_CursorPosition++;
+    }
+    
+    /* New position is set, so update */
+    LCDCommand(LCD_ADDRESS_CMD | UserApp_CursorPosition);
+  } /* end BUTTON3 */ 
 } /* end UserApp1SM_Idle() */
     
 #if 0
