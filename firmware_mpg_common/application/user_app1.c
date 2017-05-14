@@ -109,8 +109,8 @@ void UserApp1Initialize(void)
   /* If good initialization, set state to Idle */
   if( 1 )
   {
-    UserApp1_StateMachine = UserApp1SM_Idle;
-    //UserApp1_StateMachine = BCD_Code_display;
+    //UserApp1_StateMachine = UserApp1SM_Idle;
+    UserApp1_StateMachine = Debug_Interface;
   }
   else
   {
@@ -145,7 +145,14 @@ void UserApp1RunActiveState(void)
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Private functions                                                                                                  */
 /*--------------------------------------------------------------------------------------------------------------------*/
-
+   /* Existing variables (defined in other files)      */
+     extern u8 G_au8DebugScanfBuffer[];  /* From debug.c */
+     extern u8 G_u8DebugScanfCharCount;  /* From debug.c */
+     //DEBUG_SCANF_BUFFER_SIZE 
+void Debug_Interface()
+{
+  
+}
 
 /**********************************************************************************************************************
 State Machine Function Definitions
