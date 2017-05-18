@@ -146,6 +146,8 @@ void Debug_Interface(void)
   u8 u8_a_name[]="xyf";
   static u8 u8_a_tset[20];   //The array used for comparison
   u16 u16_namelength=sizeof(u8_a_name)/sizeof(u8);   //The length of the name
+  static u16 p=0;
+  u16 u16_scanfCounter=DebugScanf(u8_a_tset+p);
   static u16 u16_number=0;
   static bool test_result=TRUE;
   u8 u8_a_string1[]="*";  
@@ -153,15 +155,15 @@ void Debug_Interface(void)
   u8 u8_a_string3[]="**u16_number**";
   u16 u16_a_stinglength=sizeof(u8_a_string3)/sizeof(u8);
 
+ 
+  p++;
+if(p>20)
+{p=0;}
   
-  if(G_u8DebugScanfCharCount>=u16_namelength)
-  	 {
-           for(u16 i=0;i<=G_u8DebugScanfCharCount;i++)
-           {
-             u8_a_tset[i]=G_au8DebugScanfBuffer[i];
-           }
-           for(u16 i=G_u8DebugScanfCharCount-u16_namelength+1;i<=G_u8DebugScanfCharCount;i++)
-      	{       	  
+  if(u16_scanfCounter>=u16_namelength)
+  	{
+      for(u16 i=u16_scanfCounter-u16_namelength+1;i<=u16_scanfCounter;i++)
+      	{
           if(u8_a_tset[i]!=u8_a_name[i])
           	{
               test_result=FALSE;
@@ -169,17 +171,17 @@ void Debug_Interface(void)
 	  }
 	  if(test_result)
 	  	{
-        for(u16 i=0;i<=u16_a_stinglength;i++)
-	  	   {
-             DebugPrintf(u8_a_string1);
+	  	for(u16 i=0;i<=u16_a_stinglength;i++)
+	  		{
+              DebugPrintf(u8_a_string1);
 		}
-        DebugLineFeed();
+		DebugPrintf(u8_a_string2);
 		DebugPrintf(u8_a_string3);
 		for(u16 i=0;i<=u16_a_stinglength;i++)
 	  		{
               DebugPrintf(u8_a_string1);
 		}
-        DebugLineFeed();
+		DebugPrintf(u8_a_string2);
 	  }
   }
 }

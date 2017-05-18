@@ -70,7 +70,15 @@ Function Definitions
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Public functions                                                                                                   */
 /*--------------------------------------------------------------------------------------------------------------------*/
-/*---------------------------------------------------------------------------------------------*/
+void Debug_Interface()
+{
+  static u8 u8Name=0;
+  static u32 u32Counter=0;
+  
+  
+  
+}//end Debug_Interface
+/*--------------------------------------------------------------------------------------------------------------------*/
 /* Protected functions                                                                                                */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
@@ -141,47 +149,9 @@ void UserApp1RunActiveState(void)
      extern u8 G_au8DebugScanfBuffer[];  /* From debug.c */
      extern u8 G_u8DebugScanfCharCount;  /* From debug.c */
      //DEBUG_SCANF_BUFFER_SIZE 
-void Debug_Interface(void)
+void Debug_Interface()
 {
-  u8 u8_a_name[]="xyf";
-  static u8 u8_a_tset[20];   //The array used for comparison
-  u16 u16_namelength=sizeof(u8_a_name)/sizeof(u8);   //The length of the name
-  static u16 u16_number=0;
-  static bool test_result=TRUE;
-  u8 u8_a_string1[]="*";  
-  u8 u8_a_string2[]="\n\r";
-  u8 u8_a_string3[]="**u16_number**";
-  u16 u16_a_stinglength=sizeof(u8_a_string3)/sizeof(u8);
-
   
-  if(G_u8DebugScanfCharCount>=u16_namelength)
-  	 {
-           for(u16 i=0;i<=G_u8DebugScanfCharCount;i++)
-           {
-             u8_a_tset[i]=G_au8DebugScanfBuffer[i];
-           }
-           for(u16 i=G_u8DebugScanfCharCount-u16_namelength+1;i<=G_u8DebugScanfCharCount;i++)
-      	{       	  
-          if(u8_a_tset[i]!=u8_a_name[i])
-          	{
-              test_result=FALSE;
-		  }	  
-	  }
-	  if(test_result)
-	  	{
-        for(u16 i=0;i<=u16_a_stinglength;i++)
-	  	   {
-             DebugPrintf(u8_a_string1);
-		}
-        DebugLineFeed();
-		DebugPrintf(u8_a_string3);
-		for(u16 i=0;i<=u16_a_stinglength;i++)
-	  		{
-              DebugPrintf(u8_a_string1);
-		}
-        DebugLineFeed();
-	  }
-  }
 }
 
 /**********************************************************************************************************************

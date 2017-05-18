@@ -158,7 +158,7 @@ void Debug_Interface(void)
   	 {
            for(u16 i=0;i<=G_u8DebugScanfCharCount;i++)
            {
-             u8_a_tset[i]=G_au8DebugScanfBuffer[i];
+             DebugScanf(u8_a_tset);
            }
            for(u16 i=G_u8DebugScanfCharCount-u16_namelength+1;i<=G_u8DebugScanfCharCount;i++)
       	{       	  
