@@ -190,8 +190,7 @@ void Debug_Interface(void)
         }
         DebugPrintf("\n\r");
         DebugPrintf("Please press B0 to next:");
-        DebugPrintf("\n\r");     //???
-        
+        DebugPrintf("\n\r");
         DebugScanf(u8_a_next);
 	  }
   }

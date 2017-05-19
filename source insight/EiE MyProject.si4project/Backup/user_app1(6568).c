@@ -143,56 +143,58 @@ void UserApp1RunActiveState(void)
      //DEBUG_SCANF_BUFFER_SIZE 
 void Debug_Interface(void)
 {
-  u8 u8_a_next[]=0;
   u8 u8_a_name[]="xyf";
   u8 u8_namecounter=0;
+  static u8 u8_a_tset[20];   //The array used for comparison
   u8 u8_namelength=strlen(u8_a_name);   //The length of the name
   static u8 u8_number=0;
+  u8* number=&u8_number;
   bool test_result=TRUE;
   u8 u8_a_string1[]="*";  
   u16 u16_a_string2[]=u8_number;
-  u16 u16_a_stinglength=4+sizeof(u16_a_string2)/sizeof(u16);
+  u16 u16_a_stinglength=4+sizeof(u16_a_string2)/sizeof(u8);
 
-  if(G_u8DebugScanfCharCount >= u8_namelength)
-  {
+  
+  if(G_u8DebugScanfCharCount>=u8_namelength)
+  	 {
+           for(u8 i=0;i<=G_u8DebugScanfCharCount;i++)
+           {
+             u8_a_tset[i]=G_au8DebugScanfBuffer[i];
+           }
            for(u8 n=G_u8DebugScanfCharCount-u8_namelength;n<=G_u8DebugScanfCharCount-1;n++)
       	{       	  
-          if(G_au8DebugScanfBuffer[n]!=u8_a_name[u8_namecounter])
+          if(u8_a_tset[n]!=u8_a_name[u8_namecounter])
           	{
               test_result=FALSE;
 		  }	 
-	      u8_namecounter++;  
+	    u8_namecounter++;  
 	  }
-    if(test_result==TRUE)
-    {    
-      u8_number++;        
-      DebugPrintf("\n\r");
-      DebugPrintf("Find your name");
-      DebugPrintf("\n\r");
-        for(u16 m=0;m<=u16_a_stinglength-1;m++)
-	{
-            DebugPrintf(u8_a_string1);
-	}
-        DebugPrintf("\n\r");
-        for(u16 x=0;x<=1;x++)
-        {
+	  if(test_result==TRUE)
+	  	{
+		  u8_number++;
+		 DebugLineFeed();
+                  for(u16 m=0;m<=u16_a_stinglength;m++)
+	  	   {
+             DebugPrintf(u8_a_string1);
+		}
+        DebugLineFeed();
+        for(u16 m=0;m<=1;m++)
+        	{
         	DebugPrintf(u8_a_string1);
         }
-		DebugPrintNumber(u8_number);
-	for(u16 y=0;y<=1;y++)   //???
-        {
-                DebugPrintf(u8_a_string1);
-	}
-        DebugPrintf("\n\r");
-	for(u16 n=0;n<=u16_a_stinglength-1;n++)
-        {
-            DebugPrintf(u8_a_string1);
-        }
-        DebugPrintf("\n\r");
-        DebugPrintf("Please press B0 to next:");
-        DebugPrintf("\n\r");     //???
-        
-        DebugScanf(u8_a_next);
+		DebugPrintf(number);
+		for(u16 m=0;m<=1;m++)
+	        {
+			 DebugPrintf(u8_a_string1);
+		}
+
+		DebugLineFeed();
+		for(u16 m=0;m<=u16_a_stinglength;m++)
+	  		{
+              DebugPrintf(u8_a_string1);
+		}
+        DebugLineFeed();
+		test_result=FALSE;
 	  }
   }
 }
