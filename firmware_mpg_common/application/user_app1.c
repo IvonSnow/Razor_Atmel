@@ -137,65 +137,6 @@ void UserApp1RunActiveState(void)
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Private functions                                                                                                  */
 /*--------------------------------------------------------------------------------------------------------------------*/
-   /* Existing variables (defined in other files)      */
-     extern u8 G_au8DebugScanfBuffer[];  /* From debug.c */
-     extern u8 G_u8DebugScanfCharCount;  /* From debug.c */
-     //DEBUG_SCANF_BUFFER_SIZE 
-void Debug_Interface(void)
-{
-  u8 u8_a_next[]=0;
-  u8 u8_a_name[]="xyf";
-  u8 u8_namecounter=0;
-  u8 u8_namelength=strlen(u8_a_name);   //The length of the name
-  static u8 u8_number=0;
-  bool test_result=TRUE;
-  u8 u8_a_string1[]="*";  
-  u16 u16_a_string2[]=u8_number;
-  u16 u16_a_stinglength=4+sizeof(u16_a_string2)/sizeof(u16);
-
-  if(G_u8DebugScanfCharCount >= u8_namelength)
-  {
-           for(u8 n=G_u8DebugScanfCharCount-u8_namelength;n<=G_u8DebugScanfCharCount-1;n++)
-      	{       	  
-          if(G_au8DebugScanfBuffer[n]!=u8_a_name[u8_namecounter])
-          	{
-              test_result=FALSE;
-		  }	 
-	      u8_namecounter++;  
-	  }
-    if(test_result==TRUE)
-    {    
-      u8_number++;        
-      DebugPrintf("\n\r");
-      DebugPrintf("Find your name");
-      DebugPrintf("\n\r");
-        for(u16 m=0;m<=u16_a_stinglength-1;m++)
-	{
-            DebugPrintf(u8_a_string1);
-	}
-        DebugPrintf("\n\r");
-        for(u16 x=0;x<=1;x++)
-        {
-        	DebugPrintf(u8_a_string1);
-        }
-		DebugPrintNumber(u8_number);
-	for(u16 y=0;y<=1;y++)   //???
-        {
-                DebugPrintf(u8_a_string1);
-	}
-        DebugPrintf("\n\r");
-	for(u16 n=0;n<=u16_a_stinglength-1;n++)
-        {
-            DebugPrintf(u8_a_string1);
-        }
-        DebugPrintf("\n\r");
-        DebugPrintf("Please press B0 to next:");
-        DebugPrintf("\n\r");     //???
-        
-        DebugScanf(u8_a_next);
-	  }
-  }
-}
 
 /**********************************************************************************************************************
 State Machine Function Definitions
@@ -364,6 +305,67 @@ void BCD_Code_display(void){
  end my way*/
  
  /*-------------------------------------------------------------------------------------------------------------------*/
+   /* Existing variables (defined in other files)      */
+     extern u8 G_au8DebugScanfBuffer[];  /* From debug.c */
+     extern u8 G_u8DebugScanfCharCount;  /* From debug.c */
+     //DEBUG_SCANF_BUFFER_SIZE 
+void Debug_Interface(void)
+{
+  u8 u8_a_next[]=0;
+  u8 u8_a_name[]="xyf";
+  u8 u8_namecounter=0;
+  u8 u8_namelength=strlen(u8_a_name);   //The length of the name
+  static u8 u8_number=0;
+  bool test_result=TRUE;
+  u8 u8_a_string1[]="*";  
+  u16 u16_a_string2[]=u8_number;
+  u16 u16_a_stinglength=4+sizeof(u16_a_string2)/sizeof(u16);
+
+  if(G_u8DebugScanfCharCount >= u8_namelength)
+  {
+           for(u8 n=G_u8DebugScanfCharCount-u8_namelength;n<=G_u8DebugScanfCharCount-1;n++)
+      	{       	  
+          if(G_au8DebugScanfBuffer[n]!=u8_a_name[u8_namecounter])
+          	{
+              test_result=FALSE;
+		  }	 
+	      u8_namecounter++;  
+	  }
+    if(test_result==TRUE)
+    {    
+      u8_number++;        
+      DebugPrintf("\n\r");
+      DebugPrintf("Find your name");
+      DebugPrintf("\n\r");
+        for(u16 m=0;m<=u16_a_stinglength-1;m++)
+	{
+            DebugPrintf(u8_a_string1);
+	}
+        DebugPrintf("\n\r");
+        for(u16 x=0;x<=1;x++)
+        {
+        	DebugPrintf(u8_a_string1);
+        }
+		DebugPrintNumber(u8_number);
+	for(u16 y=0;y<=1;y++)   //???
+        {
+                DebugPrintf(u8_a_string1);
+	}
+        DebugPrintf("\n\r");
+	for(u16 n=0;n<=u16_a_stinglength-1;n++)
+        {
+            DebugPrintf(u8_a_string1);
+        }
+        DebugPrintf("\n\r");
+        DebugPrintf("Please press B0 to next:");
+        DebugPrintf("\n\r");     //???
+        
+        DebugScanf(u8_a_next);
+	  }
+  }
+}
+
+
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
